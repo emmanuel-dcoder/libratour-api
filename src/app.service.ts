@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Tap Sync is working fine';
+    return 'Libra Tour API is working fine';
   }
 }
