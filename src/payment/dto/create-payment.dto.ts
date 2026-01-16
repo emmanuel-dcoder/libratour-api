@@ -1,0 +1,38 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNumber, IsEmail, IsOptional } from 'class-validator';
+import { accountType } from 'src/user/enum/user.enum';
+
+export class CreatePaymentDto {
+  @ApiProperty({
+    description:
+      'This is optional, only compulsory for subscription payment type',
+    example: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  duration?: number;
+
+  @ApiProperty({
+    description: 'type of payment can be either subscription or card ',
+    enum: ['card', 'subscription'],
+  })
+  @IsString()
+  paymentType: string;
+
+  @ApiProperty({
+    description: 'this is optional, only compulsory for card payment type',
+    example: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  numberOfCards?: number;
+
+  @ApiProperty({
+    description: 'this is optional, only compulsory for subscription',
+    enum: accountType,
+    example: accountType.basic,
+  })
+  @IsOptional()
+  @IsString()
+  planType?: string;
+}
