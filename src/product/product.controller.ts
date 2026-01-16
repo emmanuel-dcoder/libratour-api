@@ -31,7 +31,7 @@ import { JwtAuthGuard } from 'src/core/guard/jwt/jwt-auth.guard';
 import { AdminAuthGuard } from 'src/core/guard/admin-jwt/jwt-auth.guard';
 
 @Controller('api/v1/product')
-@ApiTags('This section is for PRODUCT CRUD')
+@ApiTags('This section is for PRODUCT/FEATURE CRUD')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
