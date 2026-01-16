@@ -7,7 +7,6 @@ import { AdminService } from './admin.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { envConfig } from 'src/core/config/env.config';
-import { User, UserSchema } from 'src/user/schemas/user.schema';
 import { AdminJwtStrategy } from 'src/core/guard/admin-jwt/admin-jwt.strategy';
 
 @Module({
