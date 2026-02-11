@@ -65,7 +65,7 @@ export class PaymentController {
   }
 
   //**webhook controller */
-  @Post()
+  @Post('webhook')
   async handleWebhook(
     @Req() req: Request & { rawBody?: string },
     @Headers('signature') signature: string,
