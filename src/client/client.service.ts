@@ -9,12 +9,14 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Client, ClientDocument } from './schemas/client.schema';
 import { ClientDto } from './dto/client.dto';
+import { MailService } from 'src/core/mail/email';
 
 @Injectable()
 export class ClientService {
   constructor(
     @InjectModel(Client.name) private clientModel: Model<ClientDocument>,
     private jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async create(clientDto: ClientDto) {
@@ -32,12 +34,62 @@ export class ClientService {
         apiKeyHash,
       });
 
+      try {
+        await this.mailService.sendMailNotification(
+          clientDto.email,
+          'LibraGold Token',
+          {
+            apiKey,
+            name: clientDto.name,
+          },
+          'token',
+        );
+      } catch (error) {
+        console.log('mail token notification error for api key:', error);
+      }
+
       return {
         id: client._id,
         name: client.name,
         email: client.email,
-        apiKey, // returned ONCE
       };
+    } catch (error) {
+      throw new HttpException(
+        error?.response?.message ?? error?.message,
+        error?.status ?? error?.statusCode ?? 500,
+      );
+    }
+  }
+
+  /** regenerate client api key */
+  async regenerateApiKey(email: string) {
+    try {
+      const existing = await this.clientModel.findOne({
+        email,
+      });
+
+      if (!existing) throw new BadRequestException('Client does not exist');
+
+      const apiKey = generateApiKey();
+      const apiKeyHash = hashApiKey(apiKey);
+
+      existing.apiKeyHash = apiKeyHash;
+      await existing.save();
+
+      try {
+        await this.mailService.sendMailNotification(
+          existing.email,
+          'LibraGold Token',
+          {
+            apiKey,
+          },
+          'token',
+        );
+      } catch (error) {
+        console.log('mail token notification error for api key:', error);
+      }
+
+      return 'Token sent successfully';
     } catch (error) {
       throw new HttpException(
         error?.response?.message ?? error?.message,

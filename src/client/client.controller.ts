@@ -1,9 +1,23 @@
-import { Controller, Post, Body, HttpStatus, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  Headers,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientService } from './client.service';
 
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { successResponse } from 'src/core/config/response';
 import { ClientDto } from './dto/client.dto';
+import { AdminAuthGuard } from 'src/core/guard/admin-jwt/jwt-auth.guard';
 
 @Controller('api/v1/client')
 @ApiTags('Onboarding client')
@@ -24,6 +38,39 @@ export class ClientController {
       code: HttpStatus.OK,
       status: 'success',
       data,
+    });
+  }
+
+  /** request new api key */
+  @ApiBearerAuth()
+  @UseGuards(AdminAuthGuard)
+  @Post('regenerate-api-key')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'client@gmail.com',
+          nullable: false,
+        },
+      },
+    },
+  })
+  @ApiOperation({
+    summary: 'Regenerate API key using current API key',
+  })
+  @ApiResponse({ status: 200, description: 'API key regenerated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid API key' })
+  async regenerateApiKey(@Body() body: { email: string }) {
+    const { email } = body;
+
+    await this.clientService.regenerateApiKey(email);
+
+    return successResponse({
+      message: 'API key regenerated successfully',
+      code: HttpStatus.OK,
+      status: 'success',
     });
   }
 

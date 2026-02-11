@@ -7,6 +7,7 @@ import { envConfig } from 'src/core/config/env.config';
 import { ClientController } from './client.controller';
 import { ClientService } from './client.service';
 import { JwtStrategy } from 'src/core/guard/jwt/jwt.strategy';
+import { MailService } from 'src/core/mail/email';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { JwtStrategy } from 'src/core/guard/jwt/jwt.strategy';
     }),
   ],
   controllers: [ClientController],
-  providers: [ClientService, JwtStrategy],
+  providers: [ClientService, JwtStrategy, MailService],
 })
 export class ClientModule {}

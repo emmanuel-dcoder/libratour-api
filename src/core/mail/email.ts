@@ -14,7 +14,7 @@ export class MailService {
     this.mailTransport = nodemailer.createTransport({
       host: envConfig.mail.host,
       port: parseInt(envConfig.mail.port, 10),
-      secure: parseInt(envConfig.mail.port, 10) === 465, // true only for 465
+      secure: false,
       auth: {
         user: envConfig.mail.user,
         pass: envConfig.mail.password,
@@ -63,7 +63,7 @@ export class MailService {
   ): Promise<void> {
     try {
       const {
-        from = '"Tap-Sync" <support@Tap-Sync.com>',
+        from = '"LibraGold" <support@libra-gold.com>',
         cc,
         bcc,
       } = options || {};
