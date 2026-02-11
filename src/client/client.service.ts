@@ -35,6 +35,7 @@ export class ClientService {
       });
 
       try {
+        //send mail
         await this.mailService.sendMailNotification(
           clientDto.email,
           'LibraGold Token',
