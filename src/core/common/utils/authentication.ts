@@ -60,7 +60,9 @@ export const AlphaNumeric = (
 };
 
 export const generateApiKey = (): string => {
-  return `sk_test_${randomBytes(32).toString('hex')}`;
+  return envConfig.environment.environment === 'test'
+    ? `sk_test_${randomBytes(32).toString('hex')}`
+    : `sk_live_${randomBytes(32).toString('hex')}`;
 };
 
 export const hashApiKey = (apiKey: string): string => {

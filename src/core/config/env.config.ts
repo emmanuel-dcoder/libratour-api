@@ -43,4 +43,10 @@ export const envConfig = {
     secretKey: process.env.LOTUS_SECRET_KEY,
     publicKey: process.env.LOTUS_PUBLIC_KEY,
   },
+  environment: {
+    environment: process.env.ENVIRONMENT,
+  },
+  nodeEnvironment: {
+    nodeEnvironment: process.env.NODE_ENV,
+  },
 };
