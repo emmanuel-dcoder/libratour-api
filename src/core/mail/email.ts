@@ -66,7 +66,7 @@ export class MailService {
 
       const templateSource = await this.getTemplate(templateName);
       const compiledTemplate = handlebars.compile(templateSource);
-
+      //send mail
       await this.mailTransport.sendMail({
         from,
         to,
